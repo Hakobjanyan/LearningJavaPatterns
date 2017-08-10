@@ -2,22 +2,56 @@
  * Created by Arsen on 10.08.2017.
  */
 public class DelegateApp {
-    public static void main(String[] args)
-    {
-        B b = new B();
-        b.f();
+    public static void main(String[] args) {
+
+        Painter painter = new Painter();
+        painter.setGraphics(new Square());
+        painter.draw();
+
+        painter.setGraphics(new Treangle());
+        painter.draw();
     }
 }
 
-class A{
-    void f(){
-        System.out.println("f()");
+interface Graphics {
+    void draw();
+}
+
+class Treangle implements Graphics {
+
+    @Override
+    public void draw() {
+        System.out.println("Рисуем треуголнник");
     }
 }
 
-class B{
-    A a = new A();
-    void f(){
-        a.f();
+class Square implements Graphics {
+
+    @Override
+    public void draw() {
+        System.out.println("Рисуем квадрат");
+    }
+}
+
+class Circle implements Graphics {
+
+    @Override
+    public void draw() {
+        System.out.println("Рисуем треуголнник");
+    }
+
+
+}
+
+
+class Painter {
+    Graphics graphics;
+
+    void setGraphics(Graphics g) {
+        graphics = g;
+    }
+
+    void draw() {
+        graphics.draw();
     }
 }
