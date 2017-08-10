@@ -3,18 +3,23 @@
  */
 public class FacadeApp {
     public static void main(String[] args) {
-        Power power = new Power();
-        power.on();
 
-        DVDRom dvdRom = new DVDRom();
-        dvdRom.load();
-
-        HDD hdd = new HDD();
-        hdd.copyFromDVD(dvdRom);
+        Computer computer = new Computer();
+        computer.copy();
     }
 }
 
+class Computer {
+    Power power = new Power();
+    DVDRom dvdRom = new DVDRom();
+    HDD hdd = new HDD();
 
+    void copy() {
+        power.on();
+        dvdRom.load();
+        hdd.copyFromDVD(dvdRom);
+    }
+}
 
 class Power {
     void on() {
