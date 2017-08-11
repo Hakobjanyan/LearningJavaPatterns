@@ -4,35 +4,27 @@
 public class BuilderApp {
     public static void main(String[] args) {
 
-        Car car = new CarBuilder()
-                .buildMaker("Mercedes")
-                .buildTransmission(Transmission.AUTO)
-                .buildMaxSpeed(250)
-                .build();
+        Director director = new Director();
+        director.setCarBuilder(new SubaruBuilder());
+        Car car = director.builderCar();
+
         System.out.println(car);
     }
 }
 
-enum Transmission{
+enum Transmission {
     MANUAL, AUTO
 }
 
-class  Car{
+// продукт
+class Car {
     String make;
     Transmission transmission;
     int maxSpeed;
 
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public void setTransmission(Transmission transmission) {
-        this.transmission = transmission;
-    }
-
-    public void setMaxSpeed(int maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
+    public void setMake(String make) {this.make = make;}
+    public void setTransmission(Transmission transmission) {this.transmission = transmission;}
+    public void setMaxSpeed(int maxSpeed) {this.maxSpeed = maxSpeed;}
 
     @Override
     public String toString() {
@@ -44,31 +36,40 @@ class  Car{
     }
 }
 
-class CarBuilder{
-    String m = "Default";
-    Transmission t = Transmission.MANUAL;
-    int s = 120;
+// билдер
+abstract class CarBuilder {
+    Car car;
+    void createCar() {car = new Car();}
 
-    CarBuilder buildMaker(String m){
-        this.m = m;
-        return this;
-    }
-    CarBuilder buildTransmission(Transmission t){
-        this.t = t;
-        return this;
-    }
+    abstract void buildMake();
+    abstract void buildTransmission();
+    abstract void buildMaxSpeed();
 
-    CarBuilder buildMaxSpeed(int s){
-        this.s = s;
-        return this;
-    }
+    Car getCar() {return car;}
+}
 
-    Car build(){
-        Car car = new Car();
-        car.setMake(m);
-        car.setTransmission(t);
-        car.setMaxSpeed(s);
+class FordMandeoBuilder extends CarBuilder {
+    void buildMake() {car.setMake("Ford Mondeo");}
+    void buildTransmission() {car.setTransmission(Transmission.AUTO);}
+    void buildMaxSpeed() {car.setMaxSpeed(333);}
+}
+class SubaruBuilder extends CarBuilder {
+    void buildMake() {car.setMake("Subaru");}
+    void buildTransmission() {car.setTransmission(Transmission.MANUAL);}
+    void buildMaxSpeed() {car.setMaxSpeed(334);}
+}
+
+class Director {
+    CarBuilder carBuilder;
+
+    public void setCarBuilder(CarBuilder b) {this.carBuilder = b;}
+
+    Car builderCar() {
+        carBuilder.createCar();
+        carBuilder.buildMake();
+        carBuilder.buildTransmission();
+        carBuilder.buildMaxSpeed();
+        Car car = carBuilder.getCar();
         return car;
-
     }
 }
